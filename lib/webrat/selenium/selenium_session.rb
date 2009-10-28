@@ -24,6 +24,8 @@ module Webrat
   end
 
   class SeleniumSession
+    WAIT_TIMEOUT = 5 unless defined?(WAIT_TIMEOUT)
+
     include Webrat::SaveAndOpenPage
     include Webrat::Selenium::SilenceStream
 
@@ -45,7 +47,7 @@ module Webrat
 
     def fill_in(field_identifier, options)
       locator = "webrat=#{field_identifier}"
-      selenium.wait_for_element locator, :timeout_in_seconds => 5
+      selenium.wait_for_element locator, :timeout_in_seconds => WAIT_TIMEOUT
       selenium.type(locator, "#{options[:with]}")
     end
 
@@ -72,7 +74,7 @@ module Webrat
       pattern ||= '*'
       locator = "button=#{pattern}"
 
-      selenium.wait_for_element locator, :timeout_in_seconds => 5
+      selenium.wait_for_element locator, :timeout_in_seconds => WAIT_TIMEOUT
       selenium.click locator
     end
 
@@ -86,7 +88,7 @@ module Webrat
       end
 
       locator = "webratlink=#{pattern}"
-      selenium.wait_for_element locator, :timeout_in_seconds => 5
+      selenium.wait_for_element locator, :timeout_in_seconds => WAIT_TIMEOUT
       selenium.click locator
     end
 
@@ -94,7 +96,7 @@ module Webrat
 
     def click_link_within(selector, link_text, options = {})
       locator = "webratlinkwithin=#{selector}|#{link_text}"
-      selenium.wait_for_element locator, :timeout_in_seconds => 5
+      selenium.wait_for_element locator, :timeout_in_seconds => WAIT_TIMEOUT
       selenium.click locator
     end
 
@@ -109,7 +111,7 @@ module Webrat
         select_locator = "webratselectwithoption=#{option_text}"
       end
 
-      selenium.wait_for_element select_locator, :timeout_in_seconds => 5
+      selenium.wait_for_element select_locator, :timeout_in_seconds => WAIT_TIMEOUT
       selenium.select(select_locator, option_text)
     end
 
@@ -117,7 +119,7 @@ module Webrat
 
     def choose(label_text)
       locator = "webrat=#{label_text}"
-      selenium.wait_for_element locator, :timeout_in_seconds => 5
+      selenium.wait_for_element locator, :timeout_in_seconds => WAIT_TIMEOUT
       selenium.click locator
     end
 
@@ -125,7 +127,7 @@ module Webrat
 
     def check(label_text)
       locator = "webrat=#{label_text}"
-      selenium.wait_for_element locator, :timeout_in_seconds => 5
+      selenium.wait_for_element locator, :timeout_in_seconds => WAIT_TIMEOUT
       selenium.click locator
     end
     alias_method :uncheck, :check
@@ -148,7 +150,7 @@ module Webrat
     end
 
     def wait_for(params={})
-      timeout = params[:timeout] || 5
+      timeout = params[:timeout] || WAIT_TIMEOUT
       message = params[:message] || "Timeout exceeded"
 
       begin_time = Time.now
